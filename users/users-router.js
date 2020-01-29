@@ -3,7 +3,7 @@ const router = require('express').Router();
 const Users = require('./users-model');
 const restricted = require('../auth/restricted-middleware');
 
-router.get('/', restricted, onlyHouse('HR'), (req, res) => {
+router.get('/', restricted, whatdepartment('too'), (req, res) => {
     Users.find()
       .then(users => {
         res.json(users);
@@ -12,10 +12,10 @@ router.get('/', restricted, onlyHouse('HR'), (req, res) => {
   });
 
   //connected with whatever is on six - onlyHouse 
-  function onlyHouse(house) {
+  function whatdepartment(department) {
     return function(req, res, next) {
         console.log('user', req.user)
-      if(req.user && req.user.house && req.user.house.toLowerCase() === house) {
+      if(req.user && req.user.department && req.user.department.toLowerCase() === department) {
        next();
       }else{
        res.status(403).json({spell: 'speek friend and enter'})

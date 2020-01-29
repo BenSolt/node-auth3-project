@@ -48,9 +48,9 @@ router.post('/login', (req, res) => {
 
   function signToken(user){
     const payload =  {
-        //user
+        user
         //userid: user.userid,
-        username: user.username
+       // username: user.username
         //department: user.department
     };
 
@@ -59,7 +59,7 @@ router.post('/login', (req, res) => {
     const options = {
         expiresIn: '1d'
     }
-    return jwt.sign(payload, secret, options);
+    return jwt.sign(payload, jwtSecret, options);
 }
 
 module.exports = router;

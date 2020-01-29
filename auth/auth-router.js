@@ -8,7 +8,7 @@ const Users = require('../users/users-model');
 
 router.post('/register', (req, res) => {
     let user = req.body;
-    const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
+    const hash = bcrypt.hashSync(user.password, 10);
     user.password = hash;
 
     Users.add(user)
@@ -16,11 +16,13 @@ router.post('/register', (req, res) => {
       res.status(201).json(saved);
     })
     .catch(error => {
-      res.status(500).json(error);
+      res.status(500).json(error)
+      console.log(error)
     });
 });
 
 router.post('/login', (req, res) => {
+  //add  dpeartment??
     let { username, password } = req.body;
   
     Users.findBy({ username })
@@ -30,11 +32,13 @@ router.post('/login', (req, res) => {
           //
           const token = signToken(user);
           //
+          
           res.status(200).json({ token
             //message: `Welcome  ${user.username}!`,
           });
         } else {
-          res.status(401).json({ message: 'Invalid Credentials' });
+          res.status(401).json({ message: 'Invalid Credentials auth' });
+          console.log(token, 'token!')
         }
       })
       .catch(error => {
@@ -44,12 +48,18 @@ router.post('/login', (req, res) => {
 
   function signToken(user){
     const payload =  {
-        user
+        //user
+        //userid: user.userid,
+        username: user.username
+        //department: user.department
     };
+
+    const secret = 'is it secret is it safe'
+
     const options = {
         expiresIn: '1d'
     }
-    return jwt.sign(payload, jwtSecret, options);
+    return jwt.sign(payload, secret, options);
 }
 
 module.exports = router;
